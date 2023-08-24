@@ -1,11 +1,28 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+const HomeScreen = () => {
+  return (
+    <View style={styles.canvas}>
+      <Text style={styles.title}>Hola DDA!</Text>
+    </View>
+  );
+};
+
+const Stack = createNativeStackNavigator();
 const App = () => {
   return (
-    <SafeAreaView style={styles.canvas}>
-      <Text style={styles.title}>Hola DDA!</Text>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          style={styles.title}
+          name={'Saludo'}
+          component={HomeScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
