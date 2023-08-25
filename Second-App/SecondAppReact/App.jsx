@@ -7,6 +7,7 @@ import {
   StyleSheet,
   View,
   TextInput,
+  ToastAndroid,
 } from 'react-native';
 
 const App = () => {
@@ -33,6 +34,7 @@ const App = () => {
           onPress={() => {
             let messaje = `Hola ${nombre.toUpperCase()} bienvenido al curso DDA`;
             if (!nombre) {
+              ToastAndroid.show('Debes ingresar tu nombre', ToastAndroid.SHORT);
               messaje = '';
             }
             setMensaje(messaje);
