@@ -12,7 +12,7 @@ const App = () => {
   const options = [
     {order: 'Sin Orden', index: 0},
     {order: 'En Orden', index: 1},
-    {order: 'En Reversa', index: 2},
+    {order: 'En Reversa', index: -1},
   ];
   const [optionPosition, setOptionPosition] = useState(0);
 
@@ -22,7 +22,7 @@ const App = () => {
         <Stack.Screen
           name="main"
           component={EarthquakeList}
-          initialParams={{orderPriority: optionPosition}}
+          params={{orderPriority: optionPosition}}
           options={{
             title: 'Terremotos OwO',
             headerRight: () => (

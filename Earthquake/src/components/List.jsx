@@ -3,15 +3,15 @@ import {View, FlatList, StyleSheet} from 'react-native';
 import Card from './Card';
 import axios from 'axios';
 import uuid from 'react-native-uuid';
+// import {create} from 'zustand';
+
+// const {priority, setPriority} = useStore();
 
 const EarthquakeList = props => {
   const {orderPriority} = props.route.params;
+  // const orderPriority = -1;
   const {navigation} = props;
-  const [earthquakes, setEarthquakes] = useState([
-    // {magnitud: 8, city: 'jaltipan'},
-    // {magnitud: 6.8, city: 'minatitlan'},
-    // {magnitud: 7, city: 'coatzacoalcos'},
-  ]);
+  const [earthquakes, setEarthquakes] = useState([]);
 
   const url =
     'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson';
@@ -49,12 +49,28 @@ const EarthquakeList = props => {
       // console.log(orderPriority);
     } else {
       const intervalId = setInterval(() => {
+        console.log(orderPriority);
         console.log(uuid.v4());
         getData();
       }, 30000);
       return () => clearInterval(intervalId);
     }
   }, [earthquakes]);
+
+  useEffect(() => {
+    const orderComparation = (itemA, itemB) => {
+      if (orderPriority > 0) {
+        return itemA.magnitud - itemB.magnitud;
+      } else if (orderPriority < 0) {
+        return itemB.magnitud - itemA.magnitud;
+      } else {
+        return 0;
+      }
+    };
+    const copy = [...earthquakes];
+    copy.sort(orderComparation);
+    setEarthquakes(copy);
+  }, [orderPriority]);
 
   return (
     <View style={styles.container}>
