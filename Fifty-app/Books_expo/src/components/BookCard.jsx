@@ -1,20 +1,46 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  SafeAreaView,
+  Pressable,
+  Modal,
+} from "react-native";
 
-const BookCard = ({
-  ImageUri = require("../../assets/no-image.png"),
-  Title = "No Title",
-}) => {
+import { useState } from "react";
+import BookInfo from "./BookInfo";
+
+const BookCard = ({ Data }) => {
+  const { imageUri, title } = Data;
+  const [visible, setVisible] = useState(false);
+
   const transformedTitle =
-    Title.length > 25 ? Title.slice(0, 23) + "..." : Title;
+    title.length > 25 ? title.slice(0, 23) + "..." : title;
+  const userImage =
+    imageUri !== "../../assets/no-image.png"
+      ? { uri: imageUri }
+      : require("../../assets/no-image.png");
   return (
-    <View style={style.container}>
-      <View style={style.imageContainer}>
-        <Image style={style.image} source={ImageUri} />
-      </View>
-      <View style={style.titleContainer}>
-        <Text style={style.name}>{transformedTitle}</Text>
-      </View>
-    </View>
+    <>
+      <Pressable onPress={() => setVisible(true)}>
+        <SafeAreaView style={style.container}>
+          <View style={style.imageContainer}>
+            <Image style={style.image} source={userImage} />
+          </View>
+          <View style={style.titleContainer}>
+            <Text style={style.name}>{transformedTitle}</Text>
+          </View>
+        </SafeAreaView>
+      </Pressable>
+      <Modal
+        visible={visible}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
+        <BookInfo setVisible={setVisible} {...Data} />
+      </Modal>
+    </>
   );
 };
 
@@ -44,7 +70,7 @@ const style = StyleSheet.create({
     width: 100,
     height: 150,
     borderRadius: 18,
-    resizeMode: "contain",
+    resizeMode: "cover",
   },
   titleContainer: {
     width: 100,

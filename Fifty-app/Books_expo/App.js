@@ -1,4 +1,16 @@
-import { StyleSheet, Text, View, StatusBar, FlatList } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  Modal,
+  FlatList,
+  SafeAreaView,
+  Pressable,
+} from "react-native";
+import { useState } from "react";
+import CreateBook from "./src/components/NewBook";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import BookCard from "./src/components/BookCard";
 
@@ -26,16 +38,55 @@ const Data = [
 ];
 
 export default function App() {
+  const [visible, setVisible] = useState(false);
+  const [data, setData] = useState([]);
+  const AddBook = () => {
+    return (
+      <View style={styles.addBook}>
+        <Pressable
+          onPress={() => {
+            console.log(data);
+            setVisible(!visible);
+          }}
+        >
+          <Ionicons name="add-circle" size={50} color="black" />
+        </Pressable>
+        <Modal
+          visible={visible}
+          animationType="slide"
+          presentationStyle="pageSheet"
+        >
+          <CreateBook
+            dataStore={data}
+            setDataStore={setData}
+            setVisible={setVisible}
+          />
+        </Modal>
+      </View>
+    );
+  };
   return (
-    <View style={styles.container}>
-      <StatusBar style="default" />
-      <FlatList
-        // style={{ margin: 10 }}
-        data={Data}
-        renderItem={({ item }) => <BookCard Title={item.title} />}
-        numColumns={3}
-      />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle={"default"} />
+      <View>
+        <Text style={styles.title}>Mis Libros 📚📚</Text>
+      </View>
+      <View style={styles.container}>
+        {data.length ? (
+          <FlatList
+            // style={{ margin: 10 }}
+            data={data}
+            renderItem={({ item }) => <BookCard Data={item} />}
+            numColumns={3}
+          />
+        ) : (
+          <Text style={[styles.title, { fontSize: 20 }]}>
+            No Tienes Libros 😔
+          </Text>
+        )}
+        <AddBook />
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -43,9 +94,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 10,
-    borderWidth: 1,
+    // borderWidth: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
+  },
+  addBook: {
+    // width: 50,
+    // height: 50,
+    // borderWidth: 1,
+    // justifyContent: "center",
+    // alignItems: "center",
+    position: "relative",
+    translateX: 130,
+    translatey: 130,
+  },
+  title: {
+    fontSize: 40,
+    fontWeight: "700",
+    padding: 10,
   },
 });
